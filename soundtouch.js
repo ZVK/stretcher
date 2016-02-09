@@ -20,6 +20,10 @@
 
 (function(window) {
 
+/**
+* Giving this value for the sequence length sets automatic parameter value
+* according to tempo setting (recommended)
+*/
 var USE_AUTO_SEQUENCE_LEN = 0;
 
 /**
@@ -313,13 +317,13 @@ FifoSampleBuffer.prototype = {
     }
 };
 
-function SimpleFilter(sourceSound, pipe, position) {
+function SimpleFilter(sourceSound, pipe) {
     this._pipe = pipe;
     this.sourceSound = sourceSound;
-    this.historyBufferSize = 192400;
-    this._sourcePosition = position;
+    this.historyBufferSize = 22050;
+    this._sourcePosition = 0;
     this.outputBufferPosition = 0;
-    this._position = position;
+    this._position = 0;
 }
 SimpleFilter.prototype = {
     get pipe() {
@@ -395,7 +399,7 @@ SimpleFilter.prototype = {
     }
 };
 
-function Stretch(createBuffers) {
+function Stretch(createBuffers, sampleRate) {
     AbstractFifoSamplePipe.call(this, createBuffers);
     this.bQuickSeek = true;
     this.bMidBufferDirty = false;
@@ -407,7 +411,7 @@ function Stretch(createBuffers) {
     this.bAutoSeekSetting = true;
 
     this._tempo = 1;
-    this.setParameters(44100, DEFAULT_SEQUENCE_MS, DEFAULT_SEEKWINDOW_MS, DEFAULT_OVERLAP_MS);
+    this.setParameters(sampleRate, DEFAULT_SEQUENCE_MS, DEFAULT_SEEKWINDOW_MS, DEFAULT_OVERLAP_MS);
 }
 extend(Stretch.prototype, AbstractFifoSamplePipe.prototype);
 extend(Stretch.prototype, {
@@ -764,9 +768,9 @@ extend(Stretch.prototype, {
     }
 });
 
-function SoundTouch() {
+function SoundTouch(sampleRate) {
     this.rateTransposer = new RateTransposer(false);
-    this.tdStretch = new Stretch(false);
+    this.tdStretch = new Stretch(false, sampleRate);
 
     this._inputBuffer = new FifoSampleBuffer();
     this._intermediateBuffer = new FifoSampleBuffer();
@@ -783,10 +787,8 @@ function SoundTouch() {
 }
 SoundTouch.prototype = {
     clear: function() {
-        if (typeof rateTransposer != 'undefined')
-            rateTransposer.clear();
-        if (typeof tdStretch != 'undefined')
-            tdStretch.clear();
+        rateTransposer.clear();
+        tdStretch.clear();
     },
     get rate() {
         return this._rate;
@@ -886,7 +888,7 @@ WebAudioBufferSource.prototype = {
 };
 
 function getWebAudioNode(context, filter) {
-    var BUFFER_SIZE = 16384;
+    var BUFFER_SIZE = 4096;
     var node = context.createScriptProcessor(BUFFER_SIZE, 2, 2),
         samples = new Float32Array(BUFFER_SIZE * 2);
     node.onaudioprocess = function(e) {
@@ -904,7 +906,7 @@ function getWebAudioNode(context, filter) {
     return node;
 }
 
-return soundtouch = {
+window.soundtouch = {
     'RateTransposer': RateTransposer,
     'Stretch': Stretch,
     'SimpleFilter': SimpleFilter,
@@ -913,4 +915,4 @@ return soundtouch = {
     'getWebAudioNode': getWebAudioNode
 };
 
-})(window);
+})(this);
