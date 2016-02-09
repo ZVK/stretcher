@@ -8,7 +8,18 @@ var state = {
     current_state = state.init,
     sample_rate = 44100,
     context = new AudioContext(),
-    source, node;
+    warp = {
+        down: {
+            eighth: 0.875,
+            quarter: 0.75,
+            half: 0.5
+        },
+        up: {eighth: 1.125,
+            quarter: 1.25,
+            half: 1.50
+        }
+    },
+    source, node, st;
 
 loadSample = function(mp3) {
     var request = new XMLHttpRequest();
@@ -17,8 +28,8 @@ loadSample = function(mp3) {
         context.decodeAudioData(request.response, function(decoded_data){
             source = context.createBufferSource();
             source.buffer = decoded_data;
-            var st = new soundtouch.SoundTouch(sample_rate);
-            st.tempo = 1.0;
+            st = new soundtouch.SoundTouch(sample_rate);
+            st.tempo = warp.up.eighth;
             var filter = new soundtouch.SimpleFilter(new soundtouch.WebAudioBufferSource(source.buffer), st);
             console.log(filter);
             node = soundtouch.getWebAudioNode(context, filter);
@@ -50,3 +61,4 @@ function pause() {
         node.disconnect();
     }
 }
+
