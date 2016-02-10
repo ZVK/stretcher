@@ -1,5 +1,35 @@
-<script src="soundtouch.js"></script>
-<script src="http://cwilso.github.com/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
-<script src="test.js"></script>
-<button onclick="play()">Play test</button>
-<button onclick="pause()">Pause test</button>
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Stretcher</title>
+  <meta name="description" content="PULSE Audio Time Stretcher">
+  <meta name="author" content="ZVK">
+
+  <!-- Bootstrap -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://cwilso.github.com/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+	<script src="soundtouch.js"></script>
+	<!-- wavesurfer.js -->
+	<script src="./scripts/plugins/wavesurfer.min.js"></script>
+	<!-- regions plugin -->
+	<script src="./scripts/plugins/wavesurfer.regions.min.js"></script>
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body onload="init()">
+	<span id="loading"></span>
+	<div id='wave'></div>
+	<div class="slider">
+	<button onclick="play()">Play</button>
+	<button onclick="pause()">Pause</button>
+	<script src="test.js"></script>
+</body>
+</html>
+
+
+
