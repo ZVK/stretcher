@@ -1015,9 +1015,13 @@ body .markdown-body
   }
 }
 </style><title>README</title></head><body><article class="markdown-body"><h1 id="stretcher"><a name="user-content-stretcher" href="#stretcher" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Stretcher</h1>
-<p>A time stretching web app using soundtouch-js.</p>
-<p>You can find more details on that library here: <a href="https://github.com/ZVK/soundtouch-js">soundtouch-js</a></p>
+<p>A time stretching web app using <a href="https://github.com/ZVK/soundtouch-js">soundtouch-js</a> and <a href="https://github.com/katspaugh/wavesurfer.js">wavesurfer-js</a>.</p>
+<h2 id="wavesurfer-documentation"><a name="user-content-wavesurfer-documentation" href="#wavesurfer-documentation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>WaveSurfer Documentation:</h2>
+<ul>
+<li><a href="http://wavesurfer-js.org/">wavesurfer-js.org</a></li>
+</ul>
 <h2 id="soundtouch-basics"><a name="user-content-soundtouch-basics" href="#soundtouch-basics" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>SoundTouch Basics:</h2>
+<p>SoundTouch </p>
 <p>The following code exposes soundtouch objects to the browser window:</p>
 <pre><code>
 window.soundtouch = {
@@ -1030,7 +1034,7 @@ window.soundtouch = {
 };
 </code></pre>
 
-<p>Here are the required argument types each constructor takes:</p>
+<p>Here are the required argument types each of these constructors will take:</p>
 <ul>
 <li>RateTransposer createBuffer=bool</li>
 <li>Stretch createBuffers=bool, sampleRate=int</li>
@@ -1041,12 +1045,12 @@ window.soundtouch = {
 </ul>
 <h2 id="browser-requirements"><a name="user-content-browser-requirements" href="#browser-requirements" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Browser Requirements</h2>
 <p>MP3 Support:<br />
-Chome &gt;= 3.0<br />
+Chrome &gt;= 3.0<br />
 Safari &gt;= 3.1<br />
 Safari Mobile &gt;= 3.2<br />
 Opera &gt;= 10.50<br />
 Firefox &gt;= 3.5<br />
-<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility">Mozilla&rsquo;s Browser Compatibility Table</a><br />
-<pre><br />
-To avoid patent issues, support for MP3 is not built directly into Firefox. Instead it relies on support from the OS. Firefox supports this format on the following platforms: Windows Vista+ since Firefox 22.0, Android since Firefox 20.0, Firefox OS since Firefox 15.0, Linux since Firefox 26.0 (relies on GStreamer codecs) and OS X 10.7 since Firefox 35.0.<br />
-</pre></p></article></body></html>
+A note from: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility">Mozilla&rsquo;s Browser Compatibility Table</a><br />
+<blockquote><br />
+[5]To avoid patent issues, support for MP3 is not built directly into Firefox. Instead it relies on support from the OS. Firefox supports this format on the following platforms: Windows Vista+ since Firefox 22.0, Android since Firefox 20.0, Firefox OS since Firefox 15.0, Linux since Firefox 26.0 (relies on GStreamer codecs) and OS X 10.7 since Firefox 35.0.<br />
+</blockquote></p></article></body></html>
