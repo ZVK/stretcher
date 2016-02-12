@@ -1,0 +1,18 @@
+@font-face {
+	font-family: gunplay;
+	src: url('./gunplay.ttf');
+}
+body {
+	background-color: #BDCCD4;
+	font-family: gunplay;
+	color: #7AC943;
+}
+#tempo_slider .slider-selection {
+	background: #BABABA;
+}
+#main_wrapper {
+	background-color: #FFF;
+}
+#heading {
+	color: #BDCCD4;
+}

@@ -1,34 +1,80 @@
 <!doctype html>
-
 <html lang="en">
-<head>
-  <meta charset="utf-8">
+	<head>
+	  <meta charset="utf-8">
+	  <title>Stretcher</title>
+	  <meta name="description" content="PULSE Audio Time Stretcher">
+	  <meta name="author" content="ZVK">
+	  <!-- Bootstrap -->
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">>
+		<!-- Web Audio MonkeyPatch for old browsers -->
+		<script src="http://cwilso.github.com/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+		<script src="./soundtouch.js"></script>
+		<!-- wavesurfer.js -->
+		<script src="./scripts/plugins/wavesurfer.min.js"></script>
+		<!-- regions plugin -->
+		<script src="./scripts/plugins/wavesurfer.regions.min.js"></script>
+		<script src="./scripts/plugins/wavesurfer.timeline.min.js"></script>
+	  <!--[if lt IE 9]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	  <![endif]-->
+		<!-- Bootstrap-Slider -->
+	  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/css/bootstrap-slider.min.css">
+	  	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/6.0.16/bootstrap-slider.min.js"></script>
+	  <!-- Custom Styles -->	
+	  <link href="./main.css" rel="stylesheet">
+	</head>
 
-  <title>Stretcher</title>
-  <meta name="description" content="PULSE Audio Time Stretcher">
-  <meta name="author" content="ZVK">
+	<body onload="init()">
+		<div id="main_wrapper" class="container">
+			<div class="col-md-6 col-md-offset-3">
+				<div id="heading" class="row">
+				  <div class="col-md-6 col-md-offset-3">
+						<div class="contatiner" width="100%">
+							<img height="30px" src="./stretcher.jpg">
+							<span id="stretcher"><b><i>STRETCHER</i></b></span>
+						</div>
+					</div>
+				</div>
+				<span id="loading"></span>
+				<div id='wave'></div>
+				<div id='wave-timeline'></div>
+				<div id='transport'>
+					<div class="controls">
+		        <button onclick="pressButton()" class="btn btn-primary-outline" data-action="back">
+		            <i class="glyphicon glyphicon-step-backward"></i>
+		            Backward
+		        </button>
+		        <button onclick="pressButton()" class="btn btn-primary-outline" data-action="play">
+		            <i class="glyphicon glyphicon-play"></i>
+		            Play                                
+		        </button>
+		        <button onclick="pressButton()" class="btn btn-primary-outline" data-action="pause">
+		            <i class="glyphicon glyphicon-pause"></i>
+		            Pause
+		        </button>
 
-  <!-- Bootstrap -->
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-	<script src="http://cwilso.github.com/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
-	<script src="soundtouch.js"></script>
-	<!-- wavesurfer.js -->
-	<script src="./scripts/plugins/wavesurfer.min.js"></script>
-	<!-- regions plugin -->
-	<script src="./scripts/plugins/wavesurfer.regions.min.js"></script>
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-</head>
-
-<body onload="init()">
-	<span id="loading"></span>
-	<div id='wave'></div>
-	<div class="slider">
-	<button onclick="play()">Play</button>
-	<button onclick="pause()">Pause</button>
-	<script src="test.js"></script>
-</body>
+		        <button onclick="pressButton()" class="btn btn-primary-outline" data-action="forth">
+		            <i class="glyphicon glyphicon-step-forward"></i>
+		            Forward
+		        </button>
+		      </div>
+				</div>
+				<div class="container-fluid">
+					<div class="row">
+						<h2>TEMPO</h2><span id="tempo_value">100%</span>
+						<div id="tempo_wrapper"></div><br>
+					</div>
+					<div class="row">
+						<h2>PITCH</h2><span id="pitch_value">0st</span>
+						<div id="pitch_wrapper"></div><br>
+					</div>
+				</div>
+			</div>
+			<div id="drop"></div>
+		</div>
+	<script src="stretcher.js"></script>
+	</body>
 </html>
 
 
