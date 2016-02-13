@@ -16,3 +16,12 @@ body {
 #heading {
 	color: #BDCCD4;
 }
+#drop {
+	color: #025;
+    border: 3px dashed #ddd;
+    padding: 30px;
+}
+.lead {
+    text-align: center;
+    padding: 20px;
+}
