@@ -6,13 +6,15 @@ var GLOBAL_ACTIONS = {
             if (current_state !== state.playing && current_state !== state.init) {
                 current_state = state.playing;
                 node.connect(context.destination);
-                wavesurfer.play();
+                //wavesurfer.backend.filters[0].sourcePosition(source_position)
+                wavesurfer.play(current_time);
                 console.log("playing");
             }
         },
         'pause': function() {
             if (current_state === state.playing) {
                 current_state = state.paused;
+                //source.stop(0);
                 node.disconnect();
                 wavesurfer.pause();
                 console.log("pausing");
@@ -38,6 +40,8 @@ var GLOBAL_ACTIONS = {
         stopped: 4
     },
     current_state = state.init,
+    current_time = 0,
+    source_position = 0,
     sample_rate = 44100,
     context = new AudioContext(),
     warp = {
@@ -52,7 +56,7 @@ var GLOBAL_ACTIONS = {
             half: 1.50
         }
     },
-    source, node, st,
+    source, node, st, filter,
     /*
      * WAVESURFER-JS
      */
@@ -67,8 +71,9 @@ var GLOBAL_ACTIONS = {
 /*
  * EVENTS
  */
-//waveform play function
-wavesurfer.on('play', function(e) {
+wavesurfer.on('audioprocess', function(t){
+    current_time = t;
+    source_position = (t/source.buffer.duration)*source.buffer.length;
 });
 //wave ready state function
 wavesurfer.on('ready', function() {
@@ -89,25 +94,24 @@ wavesurfer.on('loading', function(percent, request) {
     console.log(request);
     if (percent >= 100) {
         document.getElementById("loading").innerHTML = "initializing...";
-        context.decodeAudioData(request.response, function(decoded_data) {
-                source = context.createBufferSource();
-                source.buffer = decoded_data;
-                st = new soundtouch.SoundTouch(sample_rate);
-                st.tempo = 1.0;
-                var filter = new soundtouch.SimpleFilter(new soundtouch.WebAudioBufferSource(source.buffer), st);
-                console.log(filter);
-                node = soundtouch.getWebAudioNode(context, filter);
-                current_state = state.ready;
-                wavesurfer.backend.setFilter(node);
-                document.getElementById("loading").innerHTML = "";
-                node.disconnect();
-            }, function(e) {
-                console.log(e);
-            } //decoding errors
-        );
     } else {
         document.getElementById("loading").innerHTML = percent + "% loaded";
     }
+});
+wavesurfer.on('ready', function(){
+        source = wavesurfer.backend.source;
+        source.loop = true;
+        source.loopStart = 0;
+        source.loopEnd = source.buffer.duration
+        st = new soundtouch.SoundTouch(sample_rate);
+        st.tempo = 1.0;
+        filter = new soundtouch.SimpleFilter(new soundtouch.WebAudioBufferSource(source), st);
+        console.log(filter);
+        node = soundtouch.getWebAudioNode(context, filter);
+        current_state = state.ready;
+        wavesurfer.backend.setFilter(node);
+        document.getElementById("loading").innerHTML = "";
+        node.disconnect();
 });
 //waveform end of track funciton
 wavesurfer.on('finish', function() {
@@ -116,6 +120,7 @@ wavesurfer.on('finish', function() {
 //waveform time seek function
 wavesurfer.on('seek', function(progress) {
     console.log('seeking to ' + Math.round(progress * 100) + "%");
+    console.log( source.buffer.duration*progress);
 });
 /*
  * SOUNDTOUCH-JS DATA SETTERS
