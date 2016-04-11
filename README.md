@@ -5,9 +5,10 @@ A time stretching web app using [soundtouch-js](https://github.com/ZVK/soundtouc
 ## WaveSurfer Documentation:
 - [wavesurfer-js.org](http://wavesurfer-js.org/)
 
-## SoundTouch Basics:
+this.states = [playing, paused, finished]
+this.backend.source.buffer.extract()
 
-SoundTouch 
+## SoundTouch Basics:
 
 The following code exposes soundtouch objects to the browser window:
 
