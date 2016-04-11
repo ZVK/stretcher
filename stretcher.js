@@ -5,8 +5,7 @@ var GLOBAL_ACTIONS = {
         'play': function() {
             if (current_state !== state.playing && current_state !== state.init) {
                 current_state = state.playing;
-                node.connect(context.destination);
-                //wavesurfer.backend.filters[0].sourcePosition(source_position)
+                node.connect(wavesurfer.backend.ac.destination);
                 wavesurfer.play(current_time);
                 console.log("playing");
             }
@@ -14,7 +13,8 @@ var GLOBAL_ACTIONS = {
         'pause': function() {
             if (current_state === state.playing) {
                 current_state = state.paused;
-                //source.stop(0);
+                //wavesurfer.backend.source.stop(0);
+                current_time = wavesurfer.getCurrentTime();
                 node.disconnect();
                 wavesurfer.pause();
                 console.log("pausing");
@@ -56,7 +56,7 @@ var GLOBAL_ACTIONS = {
             half: 1.50
         }
     },
-    source, node, st, filter,
+    st, filter, node,
     /*
      * WAVESURFER-JS
      */
@@ -66,23 +66,14 @@ var GLOBAL_ACTIONS = {
         waveColor: '#BDCCD4',
         progressColor: '#3FA9F5',
         audioRate: 1,
-        normalize: true
+        normalize: true,
+        pixelRation: 1,
+        interact: false
     });
 /*
  * EVENTS
  */
 wavesurfer.on('audioprocess', function(t){
-    current_time = t;
-    source_position = (t/source.buffer.duration)*source.buffer.length;
-});
-//wave ready state function
-wavesurfer.on('ready', function() {
-    var timeline = Object.create(WaveSurfer.Timeline);
-
-    timeline.init({
-        wavesurfer: wavesurfer,
-        container: "#wave-timeline"
-    });
 });
 //waveform error reporting
 wavesurfer.on('error', function(err) {
@@ -99,19 +90,34 @@ wavesurfer.on('loading', function(percent, request) {
     }
 });
 wavesurfer.on('ready', function(){
-        source = wavesurfer.backend.source;
-        source.loop = true;
-        source.loopStart = 0;
-        source.loopEnd = source.buffer.duration
+        var timeline = Object.create(WaveSurfer.Timeline);
+        timeline.init({
+            wavesurfer: wavesurfer,
+            container: "#wave-timeline"
+        });
+        wavesurfer.backend.source.loop = true;
+        wavesurfer.backend.source.loopStart = 0;
+        wavesurfer.backend.source.loopEnd = 1//wavesurfer.backend.buffer.duration
         st = new soundtouch.SoundTouch(sample_rate);
         st.tempo = 1.0;
-        filter = new soundtouch.SimpleFilter(new soundtouch.WebAudioBufferSource(source), st);
-        console.log(filter);
-        node = soundtouch.getWebAudioNode(context, filter);
+        console.log(wavesurfer.backend.source.buffer)
+        //var buffer = soundtouch.WebAudioBufferSource(wavesurfer.backend.source.buffer)
+        wavesurfer.backend.source.buffer.extract = function(target, numFrames, position) {
+            var l = wavesurfer.backend.source.buffer.getChannelData(0),
+                r = wavesurfer.backend.source.buffer.getChannelData(1);
+            for (var i = 0; i < numFrames; i++) {
+                target[i * 2] = l[i + position];
+                target[i * 2 + 1] = r[i + position];
+            }
+            return Math.min(numFrames, l.length - position);
+        };
+        filter = new soundtouch.SimpleFilter(wavesurfer.backend.source.buffer, st);
         current_state = state.ready;
+        console.log(wavesurfer.backend)
+        node = soundtouch.getWebAudioNode(wavesurfer.backend.ac, filter);
         wavesurfer.backend.setFilter(node);
         document.getElementById("loading").innerHTML = "";
-        node.disconnect();
+        wavesurfer.backend.filters[0].disconnect();
 });
 //waveform end of track funciton
 wavesurfer.on('finish', function() {
@@ -119,8 +125,9 @@ wavesurfer.on('finish', function() {
 });
 //waveform time seek function
 wavesurfer.on('seek', function(progress) {
+    current_time = wavesurfer.getCurrentTime();
     console.log('seeking to ' + Math.round(progress * 100) + "%");
-    console.log( source.buffer.duration*progress);
+    console.log( progress);
 });
 /*
  * SOUNDTOUCH-JS DATA SETTERS
@@ -238,6 +245,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function init() {
-    wavesurfer.load('./BeachBlazer.wav');
+    wavesurfer.load('./Rock_With_You.mp3');
     createSliders();
 }
