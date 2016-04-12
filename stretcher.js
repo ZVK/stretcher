@@ -60,7 +60,8 @@ var GLOBAL_ACTIONS = {
     /*
      * WAVESURFER-JS
      */
-    wavesurfer = WaveSurfer.create({
+    wavesurfer = Object.create(WaveSurfer);
+    wavesurfer.init({
         audioContext: context,
         container: '#wave',
         waveColor: '#BDCCD4',
@@ -150,12 +151,8 @@ function set_pitch(semitones) {
 /*
  * AUDIO TRANSPORT BUTTONS
  */
-function pressButton(e){
-    var target = e && e.target || event.srcElement
-    var action = target.getAttribute('data-action')
-    if (action) {
-        GLOBAL_ACTIONS[action]();
-    }
+function pressButton(action){
+    if (action) GLOBAL_ACTIONS[action]();
 }
 
 /*

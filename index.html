@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 	<head>
-	  <meta charset="utf-8">
+	  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	  <title>Stretcher</title>
-	  <meta name="description" content="PULSE Audio Time Stretcher">
-	  <meta name="author" content="ZVK">
+	  <meta name="description" content="HTML5 Audio Time Stretcher and Pitch Shifter with Drag and Drop Mp3 loading!">
+	  <meta name="author" content="Soundbomb (ZVK)">
 	  <!-- Bootstrap -->
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<!-- Web Audio MonkeyPatch for old browsers -->
@@ -45,11 +45,11 @@
 		            <i class="glyphicon glyphicon-step-backward"></i>
 		            Backward
 		        </button>-->
-		        <button onclick="pressButton()" class="btn btn-primary-outline" data-action="play">
+		        <button onclick="pressButton('play')" class="btn btn-primary-outline">
 		            <i class="glyphicon glyphicon-play"></i>
 		            Play                                
 		        </button>
-		        <button onclick="pressButton()" class="btn btn-primary-outline" data-action="pause">
+		        <button onclick="pressButton('pause')" class="btn btn-primary-outline">
 		            <i class="glyphicon glyphicon-pause"></i>
 		            Pause
 		        </button>
